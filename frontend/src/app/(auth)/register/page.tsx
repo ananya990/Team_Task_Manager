@@ -14,6 +14,7 @@ import { useAuthStore } from '@/store';
 import { authService } from '@/services/auth.service';
 import { registerSchema, type RegisterInput } from '@/lib/validations';
 import { useToast } from '@/hooks/use-toast';
+import { RegisterFormData } from '@/types';
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +31,7 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterInput) => {
     setIsLoading(true);
     try {
-      const res = await authService.register(data);
+      const res = await authService.register(data as RegisterFormData);
       setAuth(res.data.user, res.data.accessToken, res.data.refreshToken);
       toast({ title: 'Account created!', description: `Welcome to TaskManager, ${res.data.user.name}!` });
       router.replace('/dashboard');

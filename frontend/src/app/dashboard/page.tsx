@@ -144,7 +144,7 @@ export default function DashboardPage() {
         </div>
         <Button
           variant="ghost"
-          size="icon"
+          size="sm"
           className="h-8 w-8 text-muted-foreground hover:text-foreground"
           onClick={() => load(true)}
           disabled={refreshing}

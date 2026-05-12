@@ -88,14 +88,16 @@ export default function ProjectDetailPage() {
     return acc;
   }, {} as Record<TaskStatus, Task[]>);
 
-  const canManage = user?.role === 'admin' || (project.owner as any)?._id === user?._id || project.owner === user?._id;
-
+const canManage = 
+  user?.role === 'admin' || 
+  (typeof project.owner === 'string' ? project.owner === user?._id : project.owner?._id === user?._id);
+  
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start gap-4">
         <Link href="/projects">
-          <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+          <Button variant="ghost" size="sm" className="h-8 w-8 flex-shrink-0">
             <ArrowLeft size={16} />
           </Button>
         </Link>

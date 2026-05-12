@@ -15,6 +15,7 @@ import { useAuthStore } from '@/store';
 import { authService } from '@/services/auth.service';
 import { loginSchema, type LoginInput } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { LoginFormData } from '@/types';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +31,7 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginInput) => {
     setIsLoading(true);
     try {
-      const res = await authService.login(data);
+      const res = await authService.login(data as LoginFormData);
       setAuth(res.data.user, res.data.accessToken, res.data.refreshToken);
       toast({ title: 'Welcome back!', description: `Good to see you, ${res.data.user.name}` });
       router.replace('/dashboard');
