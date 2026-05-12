@@ -33,6 +33,11 @@ export const io = new SocketServer(httpServer, {
   },
 });
 
+app.use(cors({
+  origin: "https://team-task-manager-production-cdcb.up.railway.app",
+  credentials: true
+}));
+
 io.on("connection", (socket) => {
   console.log("🔌 Client connected:", socket.id);
 
