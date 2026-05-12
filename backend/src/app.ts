@@ -1,4 +1,3 @@
-// src/app.ts
 import "dotenv/config";
 import express from "express";
 import http from "http";
@@ -24,27 +23,39 @@ import userRoutes from "./routes/user.routes";
 const app = express();
 const httpServer = http.createServer(app);
 
-// ─── Socket.IO ───────────────────────────────────────────
-export const io = new SocketServer(httpServer, {
-  cors: {
-    origin: env.CLIENT_URL,
-    methods: ["GET", "POST"],
-    credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
-  },
-});
+/* ─────────────────────────────────────────────
+   🔥 CORS CONFIG (MUST BE FIRST)
+───────────────────────────────────────────── */
 
-app.use(cors({
+const corsOptions = {
   origin: env.CLIENT_URL,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-}));
+};
 
-app.options("*", cors({
-  origin: env.CLIENT_URL,
-  credentials: true,
-}));
+app.use(cors(corsOptions));
+
+/* IMPORTANT: Handle preflight globally */
+app.options("*", cors(corsOptions));
+
+/* ─────────────────────────────────────────────
+   🔥 SECURITY HEADERS
+───────────────────────────────────────────── */
+
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
+
+/* ─────────────────────────────────────────────
+   🔥 SOCKET.IO
+───────────────────────────────────────────── */
+
+export const io = new SocketServer(httpServer, {
+  cors: corsOptions,
+});
 
 io.on("connection", (socket) => {
   console.log("🔌 Client connected:", socket.id);
@@ -62,19 +73,23 @@ io.on("connection", (socket) => {
   });
 });
 
-// ─── Security Middlewares ─────────────────────────────────
-app.use(helmet());
+/* ─────────────────────────────────────────────
+   🔥 GENERAL MIDDLEWARES
+───────────────────────────────────────────── */
 
-app.use(
-  cors({
-    origin: env.CLIENT_URL,
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(compression());
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(cookieParser());
 
-// ─── Rate Limiting ────────────────────────────────────────
+if (env.NODE_ENV !== "test") {
+  app.use(morgan(env.NODE_ENV === "production" ? "combined" : "dev"));
+}
+
+/* ─────────────────────────────────────────────
+   🔥 RATE LIMITING
+───────────────────────────────────────────── */
+
 const limiter = rateLimit({
   windowMs: parseInt(env.RATE_LIMIT_WINDOW_MS, 10),
   max: parseInt(env.RATE_LIMIT_MAX, 10),
@@ -88,7 +103,6 @@ const limiter = rateLimit({
 
 app.use("/api", limiter);
 
-// Auth-specific limiter
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
@@ -100,17 +114,10 @@ const authLimiter = rateLimit({
 
 app.use("/api/auth", authLimiter);
 
-// ─── General Middlewares ──────────────────────────────────
-app.use(compression());
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-app.use(cookieParser());
+/* ─────────────────────────────────────────────
+   🔥 HEALTH CHECK
+───────────────────────────────────────────── */
 
-if (env.NODE_ENV !== "test") {
-  app.use(morgan(env.NODE_ENV === "production" ? "combined" : "dev"));
-}
-
-// ─── Health Check ─────────────────────────────────────────
 app.get("/health", (_req, res) => {
   res.json({
     status: "ok",
@@ -119,7 +126,10 @@ app.get("/health", (_req, res) => {
   });
 });
 
-// ─── API Routes ───────────────────────────────────────────
+/* ─────────────────────────────────────────────
+   🔥 ROUTES
+───────────────────────────────────────────── */
+
 app.set("io", io);
 
 app.use("/api/auth", authRoutes);
@@ -128,20 +138,24 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/users", userRoutes);
 
-// ─── Error Handling ───────────────────────────────────────
+/* ─────────────────────────────────────────────
+   🔥 ERROR HANDLERS
+───────────────────────────────────────────── */
+
 app.use(notFound);
 app.use(errorHandler);
 
-// ─── Start Server ─────────────────────────────────────────
+/* ─────────────────────────────────────────────
+   🔥 START SERVER
+───────────────────────────────────────────── */
+
 const PORT = parseInt(env.PORT, 10);
 
 async function main() {
   await connectDatabase();
 
   httpServer.listen(PORT, () => {
-    console.log(
-      `🚀 TaskManager API running on port ${PORT} [${env.NODE_ENV}]`
-    );
+    console.log(`🚀 TaskManager API running on port ${PORT} [${env.NODE_ENV}]`);
     console.log("📡 Socket.IO ready");
   });
 }
