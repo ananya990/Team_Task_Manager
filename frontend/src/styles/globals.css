@@ -1,0 +1,215 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import fonts FIRST (before layers) */
+@import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+/* =========================
+   BASE THEME VARIABLES
+========================= */
+@layer base {
+  * {
+    @apply border-border; /* This is the line failing now */
+  }
+  :root {
+    --background: 0 0% 99%;
+    --foreground: 224 71.4% 4.1%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+
+    --primary: 234 89% 64%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 234 89% 64%;
+
+    --radius: 0.625rem;
+
+    --font-cabinet: 'Cabinet Grotesk', sans-serif;
+    --font-geist-sans: 'DM Sans', sans-serif;
+
+    /* Status */
+    --color-todo: 220 13% 80%;
+    --color-in-progress: 234 89% 64%;
+    --color-review: 38 92% 60%;
+    --color-completed: 142 71% 45%;
+
+    /* Priority */
+    --color-low: 142 71% 45%;
+    --color-medium: 38 92% 50%;
+    --color-high: 24 95% 55%;
+    --color-urgent: 0 84% 60%;
+  }
+
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+
+    --card: 224 50% 7%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 224 50% 7%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 234 89% 64%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 234 89% 64%;
+  }
+}
+
+/* =========================
+   BASE STYLES
+========================= */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-geist-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-cabinet);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* =========================
+   UTILITIES
+========================= */
+@layer utilities {
+  .font-display {
+    font-family: var(--font-cabinet);
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+
+  .dark .glass {
+    background: rgba(15, 18, 35, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .bg-mesh {
+    background-color: hsl(var(--background));
+  }
+
+  /* Scrollbar */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 9999px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+
+  /* Shimmer */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+    background: hsl(var(--muted));
+  }
+
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.15) 50%,
+      transparent 100%
+    );
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Priority */
+  .priority-low { @apply bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400; }
+  .priority-medium { @apply bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-400; }
+  .priority-high { @apply bg-orange-50 text-orange-700 dark:bg-orange-950 dark:text-orange-400; }
+  .priority-urgent { @apply bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-400; }
+
+  /* Status */
+  .status-todo { @apply bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400; }
+  .status-in_progress { @apply bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-400; }
+  .status-review { @apply bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-400; }
+  .status-completed { @apply bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400; }
+
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-md hover:-translate-y-0.5;
+  }
+}
+
+/* =========================
+   GLOBAL SCROLLBAR
+========================= */
+:root {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
