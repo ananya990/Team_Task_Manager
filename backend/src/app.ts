@@ -30,12 +30,20 @@ export const io = new SocketServer(httpServer, {
     origin: env.CLIENT_URL,
     methods: ["GET", "POST"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
   },
 });
 
 app.use(cors({
-  origin: "https://team-task-manager-production-cdcb.up.railway.app",
-  credentials: true
+  origin: env.CLIENT_URL,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
+app.options("*", cors({
+  origin: env.CLIENT_URL,
+  credentials: true,
 }));
 
 io.on("connection", (socket) => {
