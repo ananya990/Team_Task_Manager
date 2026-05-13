@@ -2,7 +2,10 @@
 
 > A production-ready, full-stack collaborative task management platform.
 
-![TaskManager Banner](https://via.placeholder.com/1200x400?text=TaskManager)
+![TaskManager Banner](https://github.com/ananya990/Team_Task_Manager/tree/main/frontend/public/github_banner.png)
+
+**Live Link:** https://team-task-manager-production-cdcb.up.railway.app  
+**Demo Video Link:** https://drive.google.com/file/d/1bfgZpDCNe2s36HooOKj36h0tHI92B7yw/view?usp=sharing
 
 ---
 
@@ -61,8 +64,8 @@
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-org/TaskManager.git
-cd TaskManager
+git clone https://github.com/ananya990/Team_Task_Manager
+cd Team_Task_Manager
 ```
 
 ### 2. Backend Setup
@@ -237,26 +240,33 @@ After running the seed script:
 
 ## 🚢 Deployment
 
-### Frontend → Vercel
-```bash
-cd frontend
-npx vercel --prod
-# Set env vars in Vercel dashboard
-```
+### Frontend → Railway
+1. Create a new Railway project
+2. Connect your GitHub repository
+3. Set root directory to `frontend`
+4. Add required environment variables
+5. Build command: `npm run build`
+6. Start command: `npm start`
+7. Deploy the frontend service
 
-### Backend → Render / Railway
-1. Create a new Web Service
-2. Connect your GitHub repo
+---
+
+### Backend → Railway
+1. Create a new Railway service
+2. Connect your GitHub repository
 3. Set root directory to `backend`
 4. Build command: `npm run build`
 5. Start command: `npm start`
 6. Add environment variables
+7. Deploy the backend service
+
+---
 
 ### Database → MongoDB Atlas
-1. Create free cluster at mongodb.com/atlas
-2. Whitelist IPs (0.0.0.0/0 for production)
-3. Get connection string
-4. Set `MONGODB_URI` in backend env
+1. Create a free cluster at MongoDB Atlas
+2. Whitelist IPs (`0.0.0.0/0`) for production access
+3. Generate the MongoDB connection string
+4. Set the `MONGODB_URI` environment variable in the backend service
 
 ---
 
