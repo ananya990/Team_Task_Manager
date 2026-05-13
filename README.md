@@ -1,6 +1,6 @@
 # Team Task Manager
 
-> A production-ready, full-stack collaborative task management platform.
+> A full-stack collaborative task management platform.
 
 ![TaskManager Banner](https://github.com/ananya990/Team_Task_Manager/blob/main/frontend/public/github_banner.png)
 
