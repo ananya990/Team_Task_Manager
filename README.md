@@ -2,7 +2,7 @@
 
 > A production-ready, full-stack collaborative task management platform.
 
-![TaskManager Banner](https://github.com/ananya990/Team_Task_Manager/tree/main/frontend/public/github_banner.png)
+![TaskManager Banner](https://github.com/ananya990/Team_Task_Manager/blob/main/frontend/public/github_banner.png)
 
 **Live Link:** https://team-task-manager-production-cdcb.up.railway.app  
 **Demo Video Link:** https://drive.google.com/file/d/1bfgZpDCNe2s36HooOKj36h0tHI92B7yw/view?usp=sharing
